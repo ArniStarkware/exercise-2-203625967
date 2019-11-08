@@ -25,61 +25,61 @@ def cli():
     cli = CommandLineInterface()
     @cli.command
     def inc(x):
-        return x + 1
+        print(int(x) + 1)
     @cli.command
     def add(x, y):
-        return x + y
+        print(int(x) + int(y))
     return cli
 
 
 def test_inc(cli, capsys):
     with _argv('inc', 'x=1') as command:
         cli.main()
-        out, err = capsys.readouterr()
-        assert out == '2\n'
-        assert command.exit_code == 0
+    out, err = capsys.readouterr()
+    assert out == '2\n'
+    assert command.exit_code == 0
     with _argv('inc', 'x=2') as command:
         cli.main()
-        out, err = capsys.readouterr()
-        assert out == '3\n'
-        assert command.exit_code == 0
+    out, err = capsys.readouterr()
+    assert out == '3\n'
+    assert command.exit_code == 0
 
 
 def test_add(cli, capsys):
     with _argv('add', 'x=1', 'y=2') as command:
         cli.main()
-        out, err = capsys.readouterr()
-        assert out == '3\n'
-        assert command.exit_code == 0
-    with _argv('inc', 'x=2', 'y=3') as command:
+    out, err = capsys.readouterr()
+    assert out == '3\n'
+    assert command.exit_code == 0
+    with _argv('add', 'x=2', 'y=3') as command:
         cli.main()
-        out, err = capsys.readouterr()
-        assert out == '5\n'
-        assert command.exit_code == 0
+    out, err = capsys.readouterr()
+    assert out == '5\n'
+    assert command.exit_code == 0
 
 
 def test_no_command(cli, capsys):
     with _argv() as command:
         cli.main()
-        out, err = capsys.readouterr()
-        assert 'usage' in out.lower()
-        assert command.exit_code != 0
+    out, err = capsys.readouterr()
+    assert 'usage' in out.lower()
+    assert command.exit_code != 0
 
 
 def test_invalid_command(cli, capsys):
     with _argv('foo') as command:
         cli.main()
-        out, err = capsys.readouterr()
-        assert 'usage' in out.lower()
-        assert command.exit_code != 0
+    out, err = capsys.readouterr()
+    assert 'usage' in out.lower()
+    assert command.exit_code != 0
 
 
 def test_invalid_argument_format(cli, capsys):
     with _argv('inc', '1') as command:
         cli.main()
-        out, err = capsys.readouterr()
-        assert 'usage' in out.lower()
-        assert command.exit_code != 0
+    out, err = capsys.readouterr()
+    assert 'usage' in out.lower()
+    assert command.exit_code != 0
 
 
 def test_invalid_arguments(cli, capsys):
@@ -161,6 +161,6 @@ def _argv(*args):
         sys.argv[1:] = args
         yield command
     except SystemExit as e:
-        command.exit_code = e.args[0]
+        command.exit_code = e.args[0] if e.args else 0
     finally:
         sys.argv[1:] = argv
