@@ -61,7 +61,7 @@ def test_e1d():
 
 
 @optional
-def test_e1c_one_liner():
+def test_e1d_one_liner():
     _test_one_liner(product)
 
 
@@ -72,7 +72,7 @@ def test_e1e():
 
 
 @optional
-def test_e1d_one_liner():
+def test_e1e_one_liner():
     _test_one_liner(permutations)
 
 
@@ -83,7 +83,7 @@ def test_e1f():
 
 
 @optional
-def test_e1e_one_liner():
+def test_e1f_one_liner():
     _test_one_liner(combinations)
 
 
