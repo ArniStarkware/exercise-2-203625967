@@ -156,6 +156,7 @@ def test_server():
 @contextlib.contextmanager
 def _argv(*args):
     command = lambda: None
+    command.exit_code = 0
     try:
         argv = sys.argv[1:]
         sys.argv[1:] = args
