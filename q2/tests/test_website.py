@@ -18,6 +18,16 @@ _DATA_DIR = _ROOT / 'data'
 
 @pytest.fixture
 def website():
+    process = multiprocessing.Process(target=run_website)
+    process.start()
+    time.sleep(1)
+    try:
+        yield website
+    finally:
+        process.kill()
+
+
+def run_website():
     website = Website()
     @website.route('/')
     def index():
@@ -27,13 +37,7 @@ def website():
         if user_id not in ['1', '2']:
             return 404, ''
         return 200, f'user {user_id}'
-    process = multiprocessing.Process(target=website.run, args=(_ADDRESS,))
-    process.start()
-    time.sleep(0.1)
-    try:
-        yield website
-    finally:
-        process.kill()
+    website.run(_ADDRESS)
 
 
 def test_index(website):
@@ -63,11 +67,9 @@ def test_invalid_path(website):
 
 
 def test_web():
-    def run_webserver():
-        web.run_webserver(_ADDRESS, _DATA_DIR)
     process = multiprocessing.Process(target=run_webserver)
     process.start()
-    time.sleep(0.1)
+    time.sleep(1)
     try:
         response = requests.get(_URL)
         for user_dir in _DATA_DIR.iterdir():
@@ -79,3 +81,7 @@ def test_web():
                 assert thought_file.read_text() in response.text
     finally:
         process.terminate()
+
+
+def run_webserver():
+    web.run_webserver(_ADDRESS, _DATA_DIR)

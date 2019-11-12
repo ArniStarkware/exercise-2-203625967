@@ -91,19 +91,6 @@ def test_invalid_arguments(cli, capsys):
 
 
 def test_client():
-    def run_server():
-        server = socket.socket()
-        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server.bind(_SERVER_ADDRESS)
-        server.listen(_SERVER_BACKLOG)
-        try:
-            while True:
-                connection, address = server.accept()
-                connection.close()
-        except KeyboardInterrupt:
-            pass
-        finally:
-            server.close()
     server = multiprocessing.Process(target=run_server)
     server.start()
     try:
@@ -125,6 +112,21 @@ def test_client():
         server.terminate()
 
 
+def run_server():
+    server = socket.socket()
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(_SERVER_ADDRESS)
+    server.listen(_SERVER_BACKLOG)
+    try:
+        while True:
+            connection, address = server.accept()
+            connection.close()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.close()
+
+
 def test_server():
     host, port = _SERVER_ADDRESS
     process = subprocess.Popen(
@@ -137,11 +139,7 @@ def test_server():
         ['python', _SERVER_PATH, 'run', f'address={host}:{port}', 'data=data/'],
         stdout = subprocess.PIPE,
     )
-    stdout = None
-    def run_server():
-        nonlocal stdout
-        stdout, _ = process.communicate()
-    thread = threading.Thread(target=run_server)
+    thread = threading.Thread(target=process.communicate)
     thread.start()
     time.sleep(0.5)
     try:
