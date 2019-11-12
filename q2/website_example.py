@@ -1,15 +1,15 @@
-from webserver import WebServer
+from website import WebSite
 
 
-web_server = WebServer()
+web_site = WebSite()
 
 
-@web_server.route('/')
+@web_site.route('/')
 def index():
     return 200, '<html>users list</html>'
 
 
-@web_server.route('/users/([0-9]+)')
+@web_site.route('/users/([0-9]+)')
 def user(user_id):
     if user_id not in ['1', '2']:
         return 404, ''
@@ -17,4 +17,4 @@ def user(user_id):
 
 
 if __name__ == '__main__':
-    web_server.run(('127.0.0.1', 8000))
+    web_site.run(('127.0.0.1', 8000))
