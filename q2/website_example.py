@@ -1,15 +1,15 @@
-from website import WebSite
+from website import Website
 
 
-web_site = WebSite()
+website = Website()
 
 
-@web_site.route('/')
+@website.route('/')
 def index():
     return 200, '<html>users list</html>'
 
 
-@web_site.route('/users/([0-9]+)')
+@website.route('/users/([0-9]+)')
 def user(user_id):
     if user_id not in ['1', '2']:
         return 404, ''
@@ -17,4 +17,4 @@ def user(user_id):
 
 
 if __name__ == '__main__':
-    web_site.run(('127.0.0.1', 8000))
+    website.run(('127.0.0.1', 8000))
