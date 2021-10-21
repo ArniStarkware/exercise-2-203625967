@@ -1,2 +1,3 @@
+import os
 def file_sizes():
-    pass # TODO
+    return { filename: os.path.getsize(filename) for filename in os.listdir('.')}
