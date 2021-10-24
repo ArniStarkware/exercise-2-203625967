@@ -1,3 +1,3 @@
-import itertools
+# One can straight up copy the code from the documentation.
 def permutations(alphabet, repeat):
-    return {word[0]+word[1] for word in itertools.permutations(alphabet,r = repeat)}
+    pass # todo

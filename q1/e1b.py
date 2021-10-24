@@ -1,4 +1,4 @@
-from q1.e1c import is_prime
+from e1c import is_prime
 
 
 def sieve_of_eratosthenes(n):
