@@ -1,11 +1,20 @@
 def trace(f):
     def wrapper(*args,**kwargs):
-        print('enter '+f.__name__+str(args))
+        call = f'{f.__name__}('
+        if args:
+            call += ', '.join(repr(arg) for arg in args)
+        # These two lines are by me.
+        if args and kwargs:
+            call += ', '
+        if kwargs:
+            call += ', '.join(f'{key}={value!r}' for key, value in kwargs.items())
+        call += ')'
+        print(f'enter {call}')
         try:
-            out = f(*args,**kwargs)
-            print('leave '+f.__name__+str(args)+': '+str(out))
-            return out
-        except Exception as inst:
-            print('leave '+f.__name__+str(args)+' on error: '+str(inst))
-            raise(inst)
+            result = f(*args, **kwargs)
+            print(f'leave {call}: {result!r}')
+            return result
+        except Exception as error:
+            print(f'leave {call} on error: {error}')
+            raise
     return wrapper
