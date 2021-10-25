@@ -1,6 +1,8 @@
+import functools
 def cache(max_size):
     def decorator(f):
         cache = {}
+        @functools.wraps(f)
         def wrapper(*args):
             if args not in cache:
                 out = f(*args)
@@ -11,7 +13,3 @@ def cache(max_size):
         wrapper.cache = cache
         return wrapper
     return decorator
-
-@cache(max_size = 4)
-def fib(n):
-    return n if n < 2 else fib(n-1) + fib(n-2)

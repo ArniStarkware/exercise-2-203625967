@@ -1,4 +1,6 @@
+import functools
 def trace(f):
+    @functools.wraps(f)
     def wrapper(*args,**kwargs):
         call = f'{f.__name__}('
         if args:

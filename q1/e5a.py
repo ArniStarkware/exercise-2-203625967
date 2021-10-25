@@ -1,4 +1,7 @@
+import functools
+
 def exception_safe(f):
+    @functools.wraps(f)
     def wrapper(*args,**kwargs):
         try:
             out = f(*args,**kwargs)
